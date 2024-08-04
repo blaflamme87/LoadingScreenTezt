@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TeztGameInstance.h"
+#include "SLoadingScreen.h"
 #include "MoviePlayer.h"
 
 void UTeztGameInstance::Init()
@@ -16,9 +17,10 @@ void UTeztGameInstance::BeginLoadingScreen(const FString& MapName)
 	if (!IsRunningDedicatedServer())
 	{
 		FLoadingScreenAttributes LoadingScreen;
-		LoadingScreen.MinimumLoadingScreenDisplayTime = 3;
+		LoadingScreen.MinimumLoadingScreenDisplayTime = 2;
 		LoadingScreen.bAutoCompleteWhenLoadingCompletes = false;
-		LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget();
+		//LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget();
+		LoadingScreen.WidgetLoadingScreen = SNew(SLoadingScreen);
  
 		GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);
 	}
