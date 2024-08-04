@@ -8,8 +8,18 @@ void UTeztGameInstance::Init()
 {
 	Super::Init();
 
-	FCoreUObjectDelegates::PreLoadMap.AddUObject(this, &UTeztGameInstance::BeginLoadingScreen);
-	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UTeztGameInstance::EndLoadingScreen);
+	if (bShouldUseSlate)
+	{
+		FCoreUObjectDelegates::PreLoadMap.AddUObject(this, &UTeztGameInstance::BeginLoadingScreen);
+		FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UTeztGameInstance::EndLoadingScreen);
+	}
+	else
+	{
+		FCoreUObjectDelegates::PreLoadMap.AddUObject(this, &UTeztGameInstance::BeginLoadingScreen_UMG);
+		FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UTeztGameInstance::EndLoadingScreen_UMG);
+	}
+	
+
 }
 
 void UTeztGameInstance::BeginLoadingScreen(const FString& MapName)
@@ -17,7 +27,7 @@ void UTeztGameInstance::BeginLoadingScreen(const FString& MapName)
 	if (!IsRunningDedicatedServer())
 	{
 		FLoadingScreenAttributes LoadingScreen;
-		LoadingScreen.MinimumLoadingScreenDisplayTime = 2;
+		LoadingScreen.MinimumLoadingScreenDisplayTime = MinimumLoadingScreenDisplayTime;
 		LoadingScreen.bAutoCompleteWhenLoadingCompletes = false;
 		//LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget();
 		LoadingScreen.WidgetLoadingScreen = SNew(SLoadingScreen);
